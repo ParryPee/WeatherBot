@@ -57,3 +57,39 @@ class WeatherGrabber2(BaseScraper):
         res["validPeriod"] = records["validPeriod"]
         
         return res
+    
+class RHGrabber(BaseScraper):
+    def __init__(self, requester=None, requester_config=None, parser=None, parser_type="html.parser"):
+        parser_type = "json"
+        if not requester_config:
+            requester_config = {}
+            requester_config["respect_robots_txt"] = False # API doesn't require robotx.txt checking
+        
+        super().__init__(requester, requester_config, parser, parser_type)
+        
+    def extract_data(self, parsed_content):
+        res = {}
+        stations = parsed_content.get("data").get("stations",{})
+        readings = parsed_content.get("data").get("readings",{})
+        res["stations"] = stations
+        res["readings"] = readings
+        return res
+
+class AirTempGrabber(BaseScraper):
+    def __init__(self, requester=None, requester_config=None, parser=None, parser_type="html.parser"):
+        parser_type = "json"
+        if not requester_config:
+            requester_config = {}
+            requester_config["respect_robots_txt"] = False # API doesn't require robotx.txt checking
+        
+        super().__init__(requester, requester_config, parser, parser_type)
+    
+    def extract_data(self, parsed_content):
+        return super().extract_data(parsed_content)
+    def extract_data(self, parsed_content):
+        res = {}
+        stations = parsed_content.get("data").get("stations",{})
+        readings = parsed_content.get("data").get("readings",{})
+        res["stations"] = stations
+        res["readings"] = readings
+        return res
