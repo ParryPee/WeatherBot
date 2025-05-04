@@ -6,6 +6,7 @@ A Telegram bot that provides weather forecasts for Singapore regions using data 
 
 - 24-hour weather forecast for Singapore
 - Regional forecasts (North, South, East, West, Central)
+- "Feels like" temperature using heat index calculation based on nearest weather station
 - General weather overview
 - Emoji weather indicators
 - Heat index calculations
@@ -70,6 +71,7 @@ A Telegram bot that provides weather forecasts for Singapore regions using data 
    - `/start` - Show the main menu
    - `/help` - Display help information
    - `/forecast24` - Get the 24-hour forecast for a region
+   - `/feelslike` - Get the current "feels like" temperature based on your location
 
 ## Project Structure
 
@@ -83,8 +85,10 @@ A Telegram bot that provides weather forecasts for Singapore regions using data 
 
 ## Weather Data
 
-The bot fetches data from Singapore's official weather API:
+The bot fetches data from Singapore's official weather APIs:
 - 24-hour forecast: https://api.data.gov.sg/v1/environment/24-hour-weather-forecast
+- Relative humidity: https://api-open.data.gov.sg/v2/real-time/api/relative-humidity
+- Air temperature: https://api-open.data.gov.sg/v2/real-time/api/air-temperature
 
 ## Weather Emojis
 
@@ -106,6 +110,20 @@ The bot uses the following emojis to represent weather conditions:
 ## Heat Index
 
 The bot calculates the heat index based on temperature and humidity, providing a "feels like" temperature that accounts for how the human body perceives the combination of heat and humidity.
+
+### Heat Index Calculation
+
+The heat index is calculated using the polynomial regression equation that accounts for:
+- Air temperature
+- Relative humidity
+- The combined effect of temperature and humidity on thermal comfort
+
+For the "feels like" feature, the bot:
+1. Retrieves the user's current location (requires location permission)
+2. Finds the nearest weather station based on Haversine distance calculation
+3. Gets real-time temperature and humidity readings from that station
+4. Calculates the heat index to determine the "feels like" temperature
+5. Presents this information to the user with the name of the nearest station
 
 ## Contributing
 
